@@ -6,8 +6,8 @@ describe Spree::Order do
     @variant = FactoryGirl.create(:variant, :price => 10)
 
     @variant_with_prices = FactoryGirl.create(:variant, :price => 10)
-    @variant_with_prices.volume_prices << FactoryGirl.create(:volume_price, :range => '(1..5)', :amount => 9)
-    @variant_with_prices.volume_prices << FactoryGirl.create(:volume_price, :range => '(5..9)', :amount => 8)
+    @variant_with_prices.volume_prices << FactoryGirl.create(:volume_price, :range => '(1..5)', :amount => 9, :position => 2)
+    @variant_with_prices.volume_prices << FactoryGirl.create(:volume_price, :range => '(5..9)', :amount => 8, :position => 1)
   end
 
   describe "add_variant" do
@@ -29,7 +29,7 @@ describe Spree::Order do
 
     it "should use the first matching volume price in the event of more then one matching volume prices" do
       @order.contents.add(@variant_with_prices, 5)
-      @order.line_items.first.price.should == 8
+      @order.line_items.first.price.to_f.should == 8.0
     end
   end
 end
